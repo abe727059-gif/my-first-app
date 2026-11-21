@@ -11,7 +11,10 @@
     h1 { color: #1d4ed8; text-align: center; margin: 0 0 4px 0; font-size: 26px; }
     .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 18px 0; }
     label.title { display: block; font-weight: 700; color: #334155; font-size: 14px; margin-bottom: 6px; }
-    select, input[type="password"] { width: 100%; padding: 13px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 16px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 16px; }
+    select, input[type="text"] { width: 100%; padding: 13px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 15px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 14px; }
+    .key-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .key-row input { margin-bottom: 0; flex: 1; }
+    .btn-test { background: #10b981; color: white; border: none; border-radius: 14px; padding: 0 16px; font-weight: 700; cursor: pointer; }
     .btn-main { display: block; width: 100%; background: #2563eb; color: #ffffff; text-align: center; font-weight: 700; font-size: 19px; padding: 18px 16px; border-radius: 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(37,99,235,0.28); border: none; }
     .btn-main:active { transform: scale(0.98); background: #1d4ed8; }
     .btn-voice { width: 100%; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 17px; padding: 16px; border-radius: 16px; border: none; cursor: pointer; margin-top: 10px; }
@@ -20,19 +23,14 @@
     #loading { text-align: center; margin: 22px 0; color: #1d4ed8; font-weight: 600; }
     .spinner { width: 40px; height: 40px; border: 4px solid #dbeafe; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #errorBox { background: #fee2e2; color: #991b1b; padding: 14px; border-radius: 14px; margin-top: 14px; font-size: 14px; font-weight: 600; }
-    #resultBox { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
-    .banner { padding: 14px; border-radius: 14px; font-weight: 700; text-align: center; font-size: 16px; }
-    .urg-high { background: #fee2e2; color: #991b1b; }
-    .urg-med { background: #fef3c7; color: #92400e; }
-    .urg-low { background: #dcfce7; color: #166534; }
-    .box { background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0; }
+    #statusBanner { padding: 12px; border-radius: 12px; margin-top: 12px; font-size: 14px; font-weight: 600; }
+    .status-err { background: #fee2e2; color: #991b1b; }
+    .status-ok { background: #dcfce7; color: #166534; }
+    #resultBox { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .box { background: #f8fafc; padding: 16px; border-radius: 16px; border: 1px solid #e2e8f0; }
     .box-blue { background: #eff6ff; border-color: #bfdbfe; }
-    .box-amber { background: #fffbeb; border-color: #fde68a; }
-    .tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 4px; }
-    .box-blue .tag { color: #2563eb; }
-    .box-amber .tag { color: #b45309; }
-    .box p, .box div { margin: 0; color: #1e293b; line-height: 1.5; font-size: 15px; white-space: pre-line; }
+    .tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #2563eb; display: block; margin-bottom: 6px; }
+    .box div { margin: 0; color: #1e293b; line-height: 1.6; font-size: 15px; white-space: pre-line; }
     .actions-row { display: flex; gap: 10px; margin-top: 4px; }
     .btn-sec { flex: 1; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 15px; color: #ffffff; cursor: pointer; }
     .btn-dark { background: #1e293b; }
@@ -46,10 +44,10 @@
     <h1>📄 ClearLetter</h1>
     <p class="subtitle">Global Letter & Voice Helper • 100% Free & Private</p>
 
-    <!-- One-time API Key setup saved safely on your device -->
-    <div id="keySetup">
-      <label class="title">🔑 Paste Google AI Studio Key (Saved on your device):</label>
-      <input type="password" id="apiKeyInput" placeholder="Paste AIza... key here once" onchange="saveKey()" />
+    <label class="title">🔑 Paste Google AI Studio Key (Starts with AIza...):</label>
+    <div class="key-row">
+      <input type="text" id="apiKeyInput" placeholder="Paste AIzaSy... key here" onchange="saveKey()" />
+      <button type="button" class="btn-test" onclick="testKey()">Test</button>
     </div>
 
     <label class="title">1. Select Your Language:</label>
@@ -75,17 +73,10 @@
       <option value="English|en-US">🇬🇧 English</option>
       <option value="Dutch|nl-NL">🇳🇱 Nederlands (Dutch)</option>
       <option value="German|de-DE">🇩🇪 Deutsch (German)</option>
-      <option value="Italian|it-IT">🇮🇹 Italiano (Italian)</option>
-      <option value="Polish|pl-PL">🇵🇱 Polski (Polish)</option>
-      <option value="Romanian|ro-RO">🇷🇴 Română (Romanian)</option>
       <option value="Urdu|ur-PK">🇵🇰 اردو (Urdu)</option>
       <option value="Hindi|hi-IN">🇮🇳 हिन्दी (Hindi)</option>
-      <option value="Bengali|bn-BD">🇧🇩 বাংলা (Bengali)</option>
       <option value="Swahili|sw-KE">🇰🇪 Kiswahili (Swahili)</option>
-      <option value="Hausa|ha-NG">🇳🇬 Hausa</option>
-      <option value="Yoruba|yo-NG">🇳🇬 Yorùbá</option>
       <option value="Chinese Mandarin|zh-CN">🇨🇳 中文 (Chinese)</option>
-      <option value="Vietnamese|vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
     </select>
 
     <button type="button" class="btn-main" onclick="document.getElementById('imageInput').click()">
@@ -93,30 +84,17 @@
     </button>
     <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="processLetter(event)" />
 
-    <div id="errorBox" class="hidden"></div>
+    <div id="statusBanner" class="hidden"></div>
 
     <div id="loading" class="hidden">
       <div class="spinner"></div>
-      <p>Reading letter & checking what to do...</p>
+      <p id="loadingText">Reading letter & checking what to do...</p>
     </div>
 
     <div id="resultBox" class="hidden">
-      <div id="urgencyBanner" class="banner"></div>
-      <div class="box">
-        <span class="tag">From Organization</span>
-        <p id="senderText" style="font-weight:700; font-size:17px;"></p>
-      </div>
-      <div class="box">
-        <span class="tag">What This Letter Means</span>
-        <p id="summaryText"></p>
-      </div>
       <div class="box box-blue">
-        <span class="tag">✅ What You Must Do Now</span>
-        <div id="actionText" style="font-weight:600;"></div>
-      </div>
-      <div class="box box-amber">
-        <span class="tag">🗣️ Who to Ask & What to Show Them</span>
-        <p id="scriptText" style="font-weight:600;"></p>
+        <span class="tag">✅ Letter Explanation & Action Plan</span>
+        <div id="fullResultText"></div>
       </div>
       <div class="actions-row">
         <button type="button" onclick="speakResult()" class="btn-sec btn-dark">🔊 Listen Out Loud</button>
@@ -131,9 +109,6 @@
         <option value="German|de-DE">🇩🇪 Local Person Speaks: German (Deutsch)</option>
         <option value="French|fr-FR">🇫🇷 Local Person Speaks: French (Français)</option>
         <option value="English|en-US">🇬🇧 Local Person Speaks: English</option>
-        <option value="Swedish|sv-SE">🇸🇪 Local Person Speaks: Swedish</option>
-        <option value="Italian|it-IT">🇮🇹 Local Person Speaks: Italian</option>
-        <option value="Spanish|es-ES">🇪🇸 Local Person Speaks: Spanish</option>
       </select>
       <button type="button" id="micBtn" onclick="startLiveVoice()" class="btn-voice">🎙️ Tap & Speak Now</button>
       <div id="voiceBox" class="hidden">
@@ -147,21 +122,20 @@
   <script>
     let fullSpokenText = "";
 
-    // Load saved API key automatically
     window.onload = () => {
       const saved = localStorage.getItem("gemini_api_key");
       if (saved) document.getElementById("apiKeyInput").value = saved;
     };
 
     function saveKey() {
-      const val = document.getElementById("apiKeyInput").value.trim();
-      localStorage.setItem("gemini_api_key", val);
+      localStorage.setItem("gemini_api_key", document.getElementById("apiKeyInput").value.trim());
     }
 
-    function showError(msg) {
-      const errBox = document.getElementById("errorBox");
-      errBox.innerText = "⚠️ " + msg;
-      errBox.classList.remove("hidden");
+    function showStatus(msg, isError = true) {
+      const box = document.getElementById("statusBanner");
+      box.innerText = (isError ? "⚠️ " : "✅ ") + msg;
+      box.className = isError ? "status-err" : "status-ok";
+      box.classList.remove("hidden");
     }
 
     function getLangParts(selectId) {
@@ -169,10 +143,43 @@
       return { name: val.at(0), code: val.at(1) };
     }
 
-    function compressImage(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error("Could not read this file."));
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onerror = () => reject(new Error("Please upload a valid photo (JPG or PNG)."));
+    async function callGeminiSmart(apiKey, parts) {
+      const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+      let lastError = "Could not connect to Google AI.";
+
+      for (const model of models) {
+        try {
+          const res = await fetch(`https://googleapis.com{model}:generateContent?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contents: [{ parts }] })
+          });
+          const data = await res.json();
+          if (data.error) {
+            lastError = data.error.message;
+            continue;
+          }
+          if (data.candidates && data.candidates.length > 0) {
+            return data.candidates.at(0).content.parts.at(0).text;
+          }
+        } catch (e) {
+          lastError = e.message;
+        }
+      }
+      throw new Error(lastError);
+    }
+
+    async function testKey() {
+      const apiKey = document.getElementById("apiKeyInput").value.trim();
+      if (!apiKey) {
+        showStatus("Paste your API key in the box first!");
+        return;
+      }
+      if (apiKey.startsWith("AQ.")) {
+        showStatus("That is a Cloud Vertex key (starts with AQ.). Go to ://google.com and create a Gemini key starting with AIzaSy...");
+        return;
+      }
+      saveKey();
+      showStatus("Testing connection...", false);
+      try {
+        const reply = await callGeminiSmart(apiKey, [{ text: "Reply with the single word: READY" }]);
