@@ -3,58 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClearLetter - Instant Letter Helper</title>
+  <title>ClearLetter - Global Letter & Voice Helper</title>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 16px; display: flex; justify-content: center; }
-    .card { background: #ffffff; max-width: 440px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-    h1 { color: #1d4ed8; text-align: center; margin: 0 0 6px 0; font-size: 26px; }
-    .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 22px 0; }
-    label.title { display: block; font-weight: 700; color: #334155; font-size: 14px; margin-bottom: 8px; }
-    select { width: 100%; padding: 14px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 17px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 20px; }
-    .camera-btn { display: block; width: 100%; background: #2563eb; color: #ffffff; text-align: center; font-weight: 700; font-size: 20px; padding: 20px 16px; border-radius: 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
-    .camera-btn:active { transform: scale(0.98); background: #1d4ed8; }
+    .card { background: #ffffff; max-width: 460px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    h1 { color: #1d4ed8; text-align: center; margin: 0 0 4px 0; font-size: 26px; }
+    .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 20px 0; }
+    label.title { display: block; font-weight: 700; color: #334155; font-size: 14px; margin-bottom: 6px; }
+    select { width: 100%; padding: 14px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 16px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 18px; }
+    .btn-main { display: block; width: 100%; background: #2563eb; color: #ffffff; text-align: center; font-weight: 700; font-size: 19px; padding: 18px 16px; border-radius: 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(37,99,235,0.28); border: none; }
+    .btn-main:active { transform: scale(0.98); background: #1d4ed8; }
+    .btn-voice { width: 100%; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 17px; padding: 16px; border-radius: 16px; border: none; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-voice.listening { background: #dc2626; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.75; } }
     .hidden { display: none !important; }
-    #loading { text-align: center; margin: 28px 0; color: #1d4ed8; font-weight: 600; }
-    .spinner { width: 42px; height: 42px; border: 4px solid #dbeafe; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 12px; }
+    #loading { text-align: center; margin: 24px 0; color: #1d4ed8; font-weight: 600; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #dbeafe; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #resultBox { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
-    .banner { padding: 16px; border-radius: 16px; font-weight: 700; text-align: center; font-size: 17px; }
+    #resultBox { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .banner { padding: 14px; border-radius: 14px; font-weight: 700; text-align: center; font-size: 16px; }
     .urg-high { background: #fee2e2; color: #991b1b; }
     .urg-med { background: #fef3c7; color: #92400e; }
     .urg-low { background: #dcfce7; color: #166534; }
-    .box { background: #f8fafc; padding: 16px; border-radius: 16px; border: 1px solid #e2e8f0; }
+    .box { background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0; }
     .box-blue { background: #eff6ff; border-color: #bfdbfe; }
     .box-amber { background: #fffbeb; border-color: #fde68a; }
     .tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 4px; }
     .box-blue .tag { color: #2563eb; }
     .box-amber .tag { color: #b45309; }
     .box p, .box div { margin: 0; color: #1e293b; line-height: 1.5; font-size: 15px; white-space: pre-line; }
-    .actions-row { display: flex; gap: 10px; margin-top: 6px; }
-    .btn-sec { flex: 1; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 16px; color: #ffffff; cursor: pointer; }
+    .actions-row { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-sec { flex: 1; border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 15px; color: #ffffff; cursor: pointer; }
     .btn-dark { background: #1e293b; }
     .btn-green { background: #16a34a; }
+    .divider { border-top: 1px solid #e2e8f0; margin: 22px 0 16px 0; padding-top: 16px; }
+    #voiceBox { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 14px; margin-top: 12px; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>📄 ClearLetter</h1>
-    <p class="subtitle">100% Free & Private • Photos are never saved</p>
+    <p class="subtitle">Global Letter & Voice Helper • 100% Free & Private</p>
 
-    <label class="title">1. Choose Your Language:</label>
+    <label class="title">1. Select Your Language (All World Languages):</label>
     <select id="lang">
-      <option value="Arabic">🇸🇦 العربية (Arabic)</option>
-      <option value="Ukrainian">🇺🇦 Українська (Ukrainian)</option>
-      <option value="Farsi">🇮🇷 فارسی (Farsi / Dari)</option>
-      <option value="Tigrinya">🇪🇷 ትግርኛ (Tigrinya)</option>
-      <option value="Turkish">🇹🇷 Türkçe (Turkish)</option>
-      <option value="French">🇫🇷 Français (French)</option>
-      <option value="English">🇬🇧 English</option>
+      <option value="Arabic|ar-SA">🇸🇦 العربية (Arabic)</option>
+      <option value="Ukrainian|uk-UA">🇺🇦 Українська (Ukrainian)</option>
+      <option value="Amharic|am-ET">🇪🇹 አማርኛ (Amharic)</option>
+      <option value="Tigrinya|ti-ER">🇪🇷 ትግርኛ (Tigrinya)</option>
+      <option value="Oromo|om-ET">🇪🇹 Afaan Oromoo (Oromo)</option>
+      <option value="Somali|so-SO">🇸🇴 Soomaali (Somali)</option>
+      <option value="Farsi|fa-IR">🇮🇷 فارسی / دری (Farsi / Dari)</option>
+      <option value="Pashto|ps-AF">🇦🇫 پښتو (Pashto)</option>
+      <option value="Kurdish Kurmanji|ku-TR">☀️ Kurdî (Kurdish Kurmanji)</option>
+      <option value="Kurdish Sorani|ckb-IQ">☀️ کوردی سۆرانی (Kurdish Sorani)</option>
+      <option value="Turkish|tr-TR">🇹🇷 Türkçe (Turkish)</option>
+      <option value="Russian|ru-RU">🇷🇺 Русский (Russian)</option>
+      <option value="French|fr-FR">🇫🇷 Français (French)</option>
+      <option value="Spanish|es-ES">🇪🇸 Español (Spanish)</option>
+      <option value="Portuguese|pt-PT">🇵🇹 Português (Portuguese)</option>
+      <option value="English|en-US">🇬🇧 English</option>
+      <option value="Dutch|nl-NL">🇳🇱 Nederlands (Dutch)</option>
+      <option value="German|de-DE">🇩🇪 Deutsch (German)</option>
+      <option value="Italian|it-IT">🇮🇹 Italiano (Italian)</option>
+      <option value="Polish|pl-PL">🇵🇱 Polski (Polish)</option>
+      <option value="Romanian|ro-RO">🇷🇴 Română (Romanian)</option>
+      <option value="Bulgarian|bg-BG">🇧🇬 Български (Bulgarian)</option>
+      <option value="Albanian|sq-AL">🇦🇱 Shqip (Albanian)</option>
+      <option value="Georgian|ka-GE">🇬🇪 ქართული (Georgian)</option>
+      <option value="Armenian|hy-AM">🇦🇲 Հայերեն (Armenian)</option>
+      <option value="Urdu|ur-PK">🇵🇰 اردو (Urdu)</option>
+      <option value="Hindi|hi-IN">🇮🇳 हिन्दी (Hindi)</option>
+      <option value="Bengali|bn-BD">🇧🇩 বাংলা (Bengali)</option>
+      <option value="Punjabi|pa-IN">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
+      <option value="Tamil|ta-IN">🇱🇰 தமிழ் (Tamil)</option>
+      <option value="Sinhala|si-LK">🇱🇰 සිංහල (Sinhala)</option>
+      <option value="Nepali|ne-NP">🇳🇵 नेपाली (Nepali)</option>
+      <option value="Swahili|sw-KE">🇰🇪 Kiswahili (Swahili)</option>
+      <option value="Hausa|ha-NG">🇳🇬 Hausa</option>
+      <option value="Yoruba|yo-NG">🇳🇬 Yorùbá</option>
+      <option value="Igbo|ig-NG">🇳🇬 Igbo</option>
+      <option value="Wolof|wo-SN">🇸🇳 Wolof</option>
+      <option value="Bambara|bm-ML">🇲🇱 Bamanankan (Bambara)</option>
+      <option value="Twi|ak-GH">🇬🇭 Twi (Akan)</option>
+      <option value="Lingala|ln-CD">🇨🇩 Lingála</option>
+      <option value="Kinyarwanda|rw-RW">🇷🇼 Ikinyarwanda</option>
+      <option value="Chinese Mandarin|zh-CN">🇨🇳 中文 (Chinese)</option>
+      <option value="Vietnamese|vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
+      <option value="Tagalog|fil-PH">🇵🇭 Tagalog (Filipino)</option>
+      <option value="Indonesian|id-ID">🇮🇩 Bahasa Indonesia</option>
+      <option value="Korean|ko-KR">🇰🇷 한국어 (Korean)</option>
+      <option value="Japanese|ja-JP">🇯🇵 日本語 (Japanese)</option>
     </select>
 
-    <label class="camera-btn">
-      📷 Take Photo of Letter
-      <input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden" onchange="processLetter(event)" />
+    <!-- Upload File OR Take Photo -->
+    <label class="btn-main">
+      📷 Capture Photo or Upload File
+      <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="processLetter(event)" />
     </label>
 
     <div id="loading" class="hidden">
@@ -62,6 +108,7 @@
       <p>Reading letter & checking what to do...</p>
     </div>
 
+    <!-- Letter Result Cards -->
     <div id="resultBox" class="hidden">
       <div id="urgencyBanner" class="banner"></div>
       <div class="box">
@@ -81,8 +128,28 @@
         <p id="scriptText" style="font-weight:600;"></p>
       </div>
       <div class="actions-row">
-        <button onclick="speakResult()" class="btn-sec btn-dark">🔊 Listen</button>
+        <button onclick="speakResult()" class="btn-sec btn-dark">🔊 Listen Out Loud</button>
         <button onclick="shareWhatsApp()" class="btn-sec btn-green">📲 Share Help</button>
+      </div>
+    </div>
+
+    <!-- Live Face-to-Face Voice Translator Section -->
+    <div class="divider">
+      <label class="title">2. Face-to-Face Live Voice Helper (Speak Up):</label>
+      <select id="localLang" style="margin-bottom: 8px;">
+        <option value="Dutch|nl-NL">🇳🇱 Local Person Speaks: Dutch (Nederlands)</option>
+        <option value="German|de-DE">🇩🇪 Local Person Speaks: German (Deutsch)</option>
+        <option value="French|fr-FR">🇫🇷 Local Person Speaks: French (Français)</option>
+        <option value="English|en-US">🇬🇧 Local Person Speaks: English</option>
+        <option value="Swedish|sv-SE">🇸🇪 Local Person Speaks: Swedish</option>
+        <option value="Italian|it-IT">🇮🇹 Local Person Speaks: Italian</option>
+        <option value="Spanish|es-ES">🇪🇸 Local Person Speaks: Spanish</option>
+      </select>
+      <button id="micBtn" onclick="startLiveVoice()" class="btn-voice">🎙️ Tap & Speak Now</button>
+      <div id="voiceBox" class="hidden">
+        <span class="tag" id="voiceStatus">Listening...</span>
+        <p id="voiceOriginal" style="font-size:14px; color:#64748b; margin-bottom:6px;"></p>
+        <p id="voiceTranslated" style="font-size:17px; font-weight:700; color:#1d4ed8;"></p>
       </div>
     </div>
   </div>
@@ -91,109 +158,13 @@
     const API_KEY = "PASTE_YOUR_API_KEY_HERE";
     let fullSpokenText = "";
 
+    function getLangParts(selectId) {
+      const val = document.getElementById(selectId).value.split("|");
+      return { name: val.at(0), code: val.at(1) };
+    }
+
     function compressImage(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const maxW = 1000;
-            const scale = maxW / img.width;
-            canvas.width = maxW;
-            canvas.height = img.height * scale;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL("image/jpeg", 0.7).split(",").at(1));
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function processLetter(event) {
-      const file = event.target.files.item(0);
-      if (!file) return;
-
-      const today = new Date().toDateString();
-      const usage = JSON.parse(localStorage.getItem("letterUsage") || '{"date":"","count":0}');
-      if (usage.date === today && usage.count >= 5) {
-        alert("You reached the 5 free letters limit for today. Try again tomorrow!");
-        return;
-      }
-
-      document.getElementById("loading").classList.remove("hidden");
-      document.getElementById("resultBox").classList.add("hidden");
-
-      const base64Image = await compressImage(file);
-      const userLang = document.getElementById("lang").value;
-
-      const prompt = `You are an expert European bureaucracy assistant helping newcomers. Analyze this official letter. Respond strictly in JSON format in ${userLang} (except the local helper phrase which should include the letter's original language like Dutch/German/French so they can show a worker).
-      Return ONLY valid JSON with these exact keys:
-      {
-        "urgency": "HIGH" or "MEDIUM" or "LOW",
-        "urgency_label": "Short status + any deadline date in ${userLang}",
-        "sender": "Organization name and what they do in ${userLang}",
-        "summary": "2-3 very simple sentences explaining the letter in ${userLang}",
-        "actions": "Numbered list of exact steps to take and documents needed in ${userLang}",
-        "help_script": "Who to visit (e.g. COA, IND, Jobcenter, GZA) + a polite 2-sentence message in the letter's original language to show them"
-      }`;
-
-      try {
-        const res = await fetch(`https://googleapis.com{API_KEY}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: prompt },
-                { inline_data: { mime_type: "image/jpeg", data: base64Image } }
-              ]
-            }],
-            generationConfig: { response_mime_type: "application/json" }
-          })
-        });
-
-        const data = await res.json();
-        const resultText = data.candidates.at(0).content.parts.at(0).text;
-        const result = JSON.parse(resultText);
-
-        localStorage.setItem("letterUsage", JSON.stringify({
-          date: today,
-          count: usage.date === today ? usage.count + 1 : 1
-        }));
-
-        const banner = document.getElementById("urgencyBanner");
-        banner.innerText = result.urgency_label;
-        banner.className = "banner " + 
-          (result.urgency === "HIGH" ? "urg-high" : 
-           result.urgency === "MEDIUM" ? "urg-med" : "urg-low");
-
-        document.getElementById("senderText").innerText = result.sender;
-        document.getElementById("summaryText").innerText = result.summary;
-        document.getElementById("actionText").innerText = result.actions;
-        document.getElementById("scriptText").innerText = result.help_script;
-
-        fullSpokenText = `${result.urgency_label}. ${result.summary}. ${result.actions}`;
-        document.getElementById("resultBox").classList.remove("hidden");
-      } catch (err) {
-        alert("Busy right now or connection error. Please try again in a few seconds!");
-      } finally {
-        document.getElementById("loading").classList.add("hidden");
-      }
-    }
-
-    function speakResult() {
-      window.speechSynthesis.cancel();
-      const msg = new SpeechSynthesisUtterance(fullSpokenText);
-      window.speechSynthesis.speak(msg);
-    }
-
-    function shareWhatsApp() {
-      const text = encodeURIComponent("I just used ClearLetter to translate and understand an official letter for free! Try it here: " + window.location.href);
-      window.open(`https://wa.me{text}`, "_blank");
-    }
-  </script>
-</body>
-</html>
