@@ -9,18 +9,18 @@
     body { background: #f1f5f9; margin: 0; padding: 16px; display: flex; justify-content: center; }
     .card { background: #ffffff; max-width: 460px; width: 100%; border-radius: 24px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
     h1 { color: #1d4ed8; text-align: center; margin: 0 0 4px 0; font-size: 26px; }
-    .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 20px 0; }
+    .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 18px 0; }
     label.title { display: block; font-weight: 700; color: #334155; font-size: 14px; margin-bottom: 6px; }
-    select { width: 100%; padding: 14px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 16px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 18px; }
+    select, input[type="password"] { width: 100%; padding: 13px; border: 2px solid #bfdbfe; border-radius: 14px; font-size: 16px; font-weight: 600; background: #eff6ff; color: #1e293b; margin-bottom: 16px; }
     .btn-main { display: block; width: 100%; background: #2563eb; color: #ffffff; text-align: center; font-weight: 700; font-size: 19px; padding: 18px 16px; border-radius: 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(37,99,235,0.28); border: none; }
     .btn-main:active { transform: scale(0.98); background: #1d4ed8; }
-    .btn-voice { width: 100%; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 17px; padding: 16px; border-radius: 16px; border: none; cursor: pointer; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-voice.listening { background: #dc2626; animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.75; } }
+    .btn-voice { width: 100%; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 17px; padding: 16px; border-radius: 16px; border: none; cursor: pointer; margin-top: 10px; }
+    .btn-voice.listening { background: #dc2626; }
     .hidden { display: none !important; }
-    #loading { text-align: center; margin: 24px 0; color: #1d4ed8; font-weight: 600; }
+    #loading { text-align: center; margin: 22px 0; color: #1d4ed8; font-weight: 600; }
     .spinner { width: 40px; height: 40px; border: 4px solid #dbeafe; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #errorBox { background: #fee2e2; color: #991b1b; padding: 14px; border-radius: 14px; margin-top: 14px; font-size: 14px; font-weight: 600; }
     #resultBox { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
     .banner { padding: 14px; border-radius: 14px; font-weight: 700; text-align: center; font-size: 16px; }
     .urg-high { background: #fee2e2; color: #991b1b; }
@@ -46,14 +46,23 @@
     <h1>📄 ClearLetter</h1>
     <p class="subtitle">Global Letter & Voice Helper • 100% Free & Private</p>
 
-    <label class="title">1. Select Your Language (All World Languages):</label>
+    <!-- One-time API Key setup saved safely on your device -->
+    <div id="keySetup">
+      <label class="title">🔑 Paste Google AI Studio Key (Saved on your device):</label>
+      <input type="password" id="apiKeyInput" placeholder="Paste AIza... key here once" onchange="saveKey()" />
+    </div>
+
+    <label class="title">1. Select Your Language:</label>
     <select id="lang">
+      <option value="Amharic|am-ET">🇪🇹 አማርኛ (Amharic)</option>
+      <option value="Tigrinya|ti-ET">🇪🇹 ትግርኛ (Tigrinya)</option>
+      <option value="Oromo|om-ET">🇪🇹 Afaan Oromoo (Oromo)</option>
+      <option value="Somali|so-ET">🇪🇹 Soomaali (Somali)</option>
+      <option value="Wolaytta|wal-ET">🇪🇹 Wolayttatto (Wolaytta)</option>
+      <option value="Sidama|sid-ET">🇪🇹 Sidaamu Afoo (Sidama)</option>
+      <option value="Afar|aa-ET">🇪🇹 Qafar af (Afar)</option>
       <option value="Arabic|ar-SA">🇸🇦 العربية (Arabic)</option>
       <option value="Ukrainian|uk-UA">🇺🇦 Українська (Ukrainian)</option>
-      <option value="Amharic|am-ET">🇪🇹 አማርኛ (Amharic)</option>
-      <option value="Tigrinya|ti-ER">🇪🇷 ትግርኛ (Tigrinya)</option>
-      <option value="Oromo|om-ET">🇪🇹 Afaan Oromoo (Oromo)</option>
-      <option value="Somali|so-SO">🇸🇴 Soomaali (Somali)</option>
       <option value="Farsi|fa-IR">🇮🇷 فارسی / دری (Farsi / Dari)</option>
       <option value="Pashto|ps-AF">🇦🇫 پښتو (Pashto)</option>
       <option value="Kurdish Kurmanji|ku-TR">☀️ Kurdî (Kurdish Kurmanji)</option>
@@ -69,46 +78,28 @@
       <option value="Italian|it-IT">🇮🇹 Italiano (Italian)</option>
       <option value="Polish|pl-PL">🇵🇱 Polski (Polish)</option>
       <option value="Romanian|ro-RO">🇷🇴 Română (Romanian)</option>
-      <option value="Bulgarian|bg-BG">🇧🇬 Български (Bulgarian)</option>
-      <option value="Albanian|sq-AL">🇦🇱 Shqip (Albanian)</option>
-      <option value="Georgian|ka-GE">🇬🇪 ქართული (Georgian)</option>
-      <option value="Armenian|hy-AM">🇦🇲 Հայերեն (Armenian)</option>
       <option value="Urdu|ur-PK">🇵🇰 اردو (Urdu)</option>
       <option value="Hindi|hi-IN">🇮🇳 हिन्दी (Hindi)</option>
       <option value="Bengali|bn-BD">🇧🇩 বাংলা (Bengali)</option>
-      <option value="Punjabi|pa-IN">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
-      <option value="Tamil|ta-IN">🇱🇰 தமிழ் (Tamil)</option>
-      <option value="Sinhala|si-LK">🇱🇰 සිංහල (Sinhala)</option>
-      <option value="Nepali|ne-NP">🇳🇵 नेपाली (Nepali)</option>
       <option value="Swahili|sw-KE">🇰🇪 Kiswahili (Swahili)</option>
       <option value="Hausa|ha-NG">🇳🇬 Hausa</option>
       <option value="Yoruba|yo-NG">🇳🇬 Yorùbá</option>
-      <option value="Igbo|ig-NG">🇳🇬 Igbo</option>
-      <option value="Wolof|wo-SN">🇸🇳 Wolof</option>
-      <option value="Bambara|bm-ML">🇲🇱 Bamanankan (Bambara)</option>
-      <option value="Twi|ak-GH">🇬🇭 Twi (Akan)</option>
-      <option value="Lingala|ln-CD">🇨🇩 Lingála</option>
-      <option value="Kinyarwanda|rw-RW">🇷🇼 Ikinyarwanda</option>
       <option value="Chinese Mandarin|zh-CN">🇨🇳 中文 (Chinese)</option>
       <option value="Vietnamese|vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
-      <option value="Tagalog|fil-PH">🇵🇭 Tagalog (Filipino)</option>
-      <option value="Indonesian|id-ID">🇮🇩 Bahasa Indonesia</option>
-      <option value="Korean|ko-KR">🇰🇷 한국어 (Korean)</option>
-      <option value="Japanese|ja-JP">🇯🇵 日本語 (Japanese)</option>
     </select>
 
-    <!-- Upload File OR Take Photo -->
-    <label class="btn-main">
+    <button type="button" class="btn-main" onclick="document.getElementById('imageInput').click()">
       📷 Capture Photo or Upload File
-      <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="processLetter(event)" />
-    </label>
+    </button>
+    <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="processLetter(event)" />
+
+    <div id="errorBox" class="hidden"></div>
 
     <div id="loading" class="hidden">
       <div class="spinner"></div>
       <p>Reading letter & checking what to do...</p>
     </div>
 
-    <!-- Letter Result Cards -->
     <div id="resultBox" class="hidden">
       <div id="urgencyBanner" class="banner"></div>
       <div class="box">
@@ -128,14 +119,13 @@
         <p id="scriptText" style="font-weight:600;"></p>
       </div>
       <div class="actions-row">
-        <button onclick="speakResult()" class="btn-sec btn-dark">🔊 Listen Out Loud</button>
-        <button onclick="shareWhatsApp()" class="btn-sec btn-green">📲 Share Help</button>
+        <button type="button" onclick="speakResult()" class="btn-sec btn-dark">🔊 Listen Out Loud</button>
+        <button type="button" onclick="shareWhatsApp()" class="btn-sec btn-green">📲 Share Help</button>
       </div>
     </div>
 
-    <!-- Live Face-to-Face Voice Translator Section -->
     <div class="divider">
-      <label class="title">2. Face-to-Face Live Voice Helper (Speak Up):</label>
+      <label class="title">2. Face-to-Face Live Voice Helper:</label>
       <select id="localLang" style="margin-bottom: 8px;">
         <option value="Dutch|nl-NL">🇳🇱 Local Person Speaks: Dutch (Nederlands)</option>
         <option value="German|de-DE">🇩🇪 Local Person Speaks: German (Deutsch)</option>
@@ -145,7 +135,7 @@
         <option value="Italian|it-IT">🇮🇹 Local Person Speaks: Italian</option>
         <option value="Spanish|es-ES">🇪🇸 Local Person Speaks: Spanish</option>
       </select>
-      <button id="micBtn" onclick="startLiveVoice()" class="btn-voice">🎙️ Tap & Speak Now</button>
+      <button type="button" id="micBtn" onclick="startLiveVoice()" class="btn-voice">🎙️ Tap & Speak Now</button>
       <div id="voiceBox" class="hidden">
         <span class="tag" id="voiceStatus">Listening...</span>
         <p id="voiceOriginal" style="font-size:14px; color:#64748b; margin-bottom:6px;"></p>
@@ -155,8 +145,24 @@
   </div>
 
   <script>
-    const API_KEY = "PASTE_YOUR_API_KEY_HERE";
     let fullSpokenText = "";
+
+    // Load saved API key automatically
+    window.onload = () => {
+      const saved = localStorage.getItem("gemini_api_key");
+      if (saved) document.getElementById("apiKeyInput").value = saved;
+    };
+
+    function saveKey() {
+      const val = document.getElementById("apiKeyInput").value.trim();
+      localStorage.setItem("gemini_api_key", val);
+    }
+
+    function showError(msg) {
+      const errBox = document.getElementById("errorBox");
+      errBox.innerText = "⚠️ " + msg;
+      errBox.classList.remove("hidden");
+    }
 
     function getLangParts(selectId) {
       const val = document.getElementById(selectId).value.split("|");
@@ -164,7 +170,9 @@
     }
 
     function compressImage(file) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Could not read this file."));
         reader.onload = (e) => {
           const img = new Image();
+          img.onerror = () => reject(new Error("Please upload a valid photo (JPG or PNG)."));
